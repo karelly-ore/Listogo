@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart'; // Solo importa la parte móvil
+import 'web/landing_page.dart'; // El archivo con el catálogo y cómo funciona
 
 void main() {
-  runApp(const ClienteApp());
+  runApp(const ListoWeb());
 }
 
-class ClienteApp extends StatelessWidget {
-  const ClienteApp({super.key});
+class ListoWeb extends StatelessWidget {
+  const ListoWeb({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'LISTO! GO',
+      title: 'LISTO! GO - Descubre la App',
       theme: ThemeData(
         primaryColor: const Color(0xFFFF5A1F),
         fontFamily: 'Roboto',
       ),
-      home: const LoginScreen(), // Arranca la app de clientes
+      home: const LandingPage(), // Solo carga la cara pública
     );
   }
 }

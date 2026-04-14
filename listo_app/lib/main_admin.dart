@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart'; // Solo importa la parte móvil
+import 'web/admin_login_screen.dart'; // Solo importa la parte móvil
 
 void main() {
-  runApp(const ClienteApp());
+  runApp(const AdminApp());
 }
 
-class ClienteApp extends StatelessWidget {
-  const ClienteApp({super.key});
+class AdminApp extends StatelessWidget {
+  const AdminApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ClienteApp extends StatelessWidget {
         primaryColor: const Color(0xFFFF5A1F),
         fontFamily: 'Roboto',
       ),
-      home: const LoginScreen(), // Arranca la app de clientes
+      home: const AdminLoginScreen(), // Arranca la app de clientes
     );
   }
 }
