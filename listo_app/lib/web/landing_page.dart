@@ -7,7 +7,6 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // BARRA DE NAVEGACIÓN SUPERIOR
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -61,7 +60,7 @@ class LandingPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF5A1F),
               ),
-              onPressed: () {}, // Aquí podrías hacer scroll al registro
+              onPressed: () {},
               child: const Text(
                 "Crear Cuenta",
                 style: TextStyle(color: Colors.white),
@@ -75,7 +74,7 @@ class LandingPage extends StatelessWidget {
           children: [
             _buildHeroSection(),
             _buildCatalogSection(),
-            _buildRegisterSection(),
+            _buildRegisterSection(context),
             _buildFooter(),
           ],
         ),
@@ -83,7 +82,7 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // 1. SECCIÓN: CÓMO FUNCIONA (Hero)
+  // 1. SECCIÓN: HERO Y PASOS
   Widget _buildHeroSection() {
     return Container(
       width: double.infinity,
@@ -93,11 +92,7 @@ class LandingPage extends StatelessWidget {
         children: [
           const Text(
             "El futuro de las compras está aquí",
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
@@ -107,6 +102,7 @@ class LandingPage extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 60),
+          // GRILLA DE PASOS
           Wrap(
             spacing: 40,
             runSpacing: 40,
@@ -120,12 +116,12 @@ class LandingPage extends StatelessWidget {
               _stepCard(
                 Icons.qr_code_scanner,
                 "2. Escanea al Entrar",
-                "Usa el código QR dinámico de tu app en los torniquetes.",
+                "Usa el código QR de tu app en los torniquetes.",
               ),
               _stepCard(
                 Icons.shopping_bag,
                 "3. Toma lo que quieras",
-                "Nuestras cámaras y sensores detectan todo automáticamente.",
+                "Nuestras cámaras detectan todo automáticamente.",
               ),
               _stepCard(
                 Icons.directions_walk,
@@ -133,6 +129,99 @@ class LandingPage extends StatelessWidget {
                 "El cobro se realiza directo a tu billetera virtual.",
               ),
             ],
+          ),
+          const SizedBox(height: 80),
+
+          // --- AQUÍ ESTÁ EL CARTEL NARANJA DE LAS GASEOSAS ---
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            constraints: const BoxConstraints(maxWidth: 950),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF5A1F), // NARANJA
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFFF5A1F).withOpacity(0.3),
+                  blurRadius: 25,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Row(
+                children: [
+                  // Imagen de la oferta
+                  Expanded(
+                    flex: 4,
+                    child: SizedBox(
+                      height: 300,
+                      child: Image.asset(
+                        'assets/cocainca.jpg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.white24,
+                            child: const Icon(
+                              Icons.local_drink,
+                              size: 80,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  // Texto de la oferta
+                  Expanded(
+                    flex: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(40.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "¡OFERTA IMPERDIBLE!",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "2x1 en Gaseosas Coca-Cola e Inca Kola",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Text(
+                            "Solo por tiempo limitado en nuestra sede Ica. ¡Toma dos y paga una al pasar por el sensor!",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                          const SizedBox(height: 25),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 15,
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: const Text("VER MÁS OFERTAS"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -174,7 +263,7 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // 2. SECCIÓN: CATÁLOGO DE PRODUCTOS ESTRELLA
+  // 2. SECCIÓN: CATÁLOGO
   Widget _buildCatalogSection() {
     return Container(
       width: double.infinity,
@@ -245,8 +334,8 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // 3. SECCIÓN: REGISTRO WEB
-  Widget _buildRegisterSection() {
+  // 3. SECCIÓN: REGISTRO
+  Widget _buildRegisterSection(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
@@ -295,7 +384,9 @@ class LandingPage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFF5A1F),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _showSuccessDialog(context);
+                  },
                   child: const Text(
                     "Registrarme",
                     style: TextStyle(fontSize: 18, color: Colors.white),
@@ -305,6 +396,49 @@ class LandingPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Column(
+          children: [
+            Icon(
+              Icons.check_circle_outline,
+              color: Color(0xFFFF5A1F),
+              size: 60,
+            ),
+            SizedBox(height: 15),
+            Text(
+              "¡Registro Exitoso!",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: const Text(
+          "Bienvenido a la revolución de Listo! GO. Ya puedes empezar a comprar sin filas.",
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF5A1F),
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                "¡ENTENDIDO!",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }
@@ -327,10 +461,7 @@ class LandingPage extends StatelessWidget {
             children: [
               Text("Soporte", style: TextStyle(color: Colors.white54)),
               SizedBox(width: 20),
-              Text(
-                "Términos y Condiciones",
-                style: TextStyle(color: Colors.white54),
-              ),
+              Text("Términos", style: TextStyle(color: Colors.white54)),
               SizedBox(width: 20),
               Text("Privacidad", style: TextStyle(color: Colors.white54)),
             ],
