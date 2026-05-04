@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'web/landing_page.dart'; // El archivo con el catálogo y cómo funciona
+import 'package:listo_app/web/landing_page.dart';
 
 void main() {
   runApp(const ListoWeb());
