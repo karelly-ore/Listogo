@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart'; // Solo importa la parte móvil
+import 'web/landing_page.dart';
 
 void main() {
   runApp(const ClienteApp());
@@ -17,7 +18,7 @@ class ClienteApp extends StatelessWidget {
         primaryColor: const Color(0xFFFF5A1F),
         fontFamily: 'Roboto',
       ),
-      home: const LoginScreen(), // Arranca la app de clientes
+      home: const LandingPage(), // Arranca la app de clientes
     );
   }
 }
