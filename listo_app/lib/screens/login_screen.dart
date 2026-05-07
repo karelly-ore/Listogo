@@ -1,8 +1,89 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart'; // Importamos el Home para la navegación
+import 'home_screen.dart'; 
+import 'register_screen.dart';
+import '../services/auth_service.dart';
+import '../services/storage_service.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _correoController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  
+  bool _isLoading = false;
+  final AuthService _authService = AuthService();
+  final StorageService _storageService = StorageService(); // Servicio para guardar sesión
+
+  Future<void> _login() async {
+    // Validación básica de campos vacíos
+    if (_correoController.text.trim().isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, ingresa tu correo y contraseña'), backgroundColor: Colors.orange),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    // Consumo de tu API
+    final result = await _authService.login(
+      _correoController.text.trim(), 
+      _passwordController.text
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (result['success'] == true) {
+      // 🛡️ RESTRICCIÓN DE ROL: Solo permitimos el paso a Clientes
+      if (result['rol'] == 'Cliente') {
+        
+        // Guardamos TODA la sesión universalmente
+        await _storageService.saveAuthData(
+          result['token'],
+          result['usuario'], 
+          result['rol']      
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result['message'] ?? '¡Bienvenido!'), backgroundColor: Colors.green),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      } else {
+        // Bloqueo a administradores, repartidores, etc.
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Acceso denegado: Esta aplicación es exclusiva para Clientes.'), 
+            backgroundColor: Colors.redAccent
+          ),
+        );
+      }
+    } else {
+      // Error de credenciales incorrectas desde el backend
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result['message'] ?? 'Error al iniciar sesión'), 
+          backgroundColor: Colors.red
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _correoController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +151,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _correoController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: 'tu@email.com',
                       border: OutlineInputBorder(
@@ -89,6 +172,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: '••••••••',
@@ -104,7 +188,34 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  // Botón Crear Cuenta
+                  // Botón Iniciar Sesión (Principal)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF5A1F), // Naranja LISTO!
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: _isLoading ? null : _login,
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Iniciar Sesión',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 15),
+
+                  // Botón Crear Cuenta (Secundario)
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -116,12 +227,9 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Navegar al Home
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
+                          MaterialPageRoute(builder: (context) => const RegisterScreen()),
                         );
                       },
                       child: const Text(

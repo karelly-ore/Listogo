@@ -18,7 +18,7 @@ class ClienteApp extends StatelessWidget {
         primaryColor: const Color(0xFFFF5A1F),
         fontFamily: 'Roboto',
       ),
-      home: const LandingPage(), // Arranca la app de clientes
+      home: const LoginScreen(), // Arranca la app de clientes
     );
   }
 }

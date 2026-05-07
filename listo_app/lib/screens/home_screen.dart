@@ -3,6 +3,7 @@ import 'inicio_screen.dart';
 import 'wallet_screen.dart';
 import 'cart_screen.dart';
 import 'history_screen.dart';
+import 'profile_screen.dart'; // 1. IMPORTAMOS LA NUEVA PANTALLA
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -57,9 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          IconButton(
+         IconButton(
             icon: const Icon(Icons.person_outline, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            },
           ),
         ],
       ),

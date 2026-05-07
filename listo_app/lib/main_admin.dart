@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'web/admin_login_screen.dart'; // Solo importa la parte móvil
+import 'views/admin_login_screen.dart'; // Solo importa la parte móvil
 
 void main() {
   runApp(const AdminApp());
